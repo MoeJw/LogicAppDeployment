@@ -113,7 +113,7 @@ module Say =
 
 
     
-    MoveLogicApp "PushAccountToAX_Http" "PushAccountToAX_Http_UAT" "Dynata-Integrations-DevTest" destinationLogicAppConfigUAT
+    MoveLogicApp "source name logic app" "dis name logic app" "the source Name of the Resource group" destinationLogicAppConfigUAT
    
     
   
