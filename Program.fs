@@ -25,10 +25,10 @@ module Say =
     let runGetLogicAppTemplate resourceGroupFrom x = validate x (GetLogicAppTemplate resourceGroupFrom)
     type Simple = JsonProvider<"./LogicAppSample.json">
 
-    let MoveLogicApp logicAppName newLogicAppName (resourceGroupFrom:string) logicAppConfig =
-        let call = runGetLogicAppTemplate resourceGroupFrom
+    let MoveLogicApp sourceLogicAppName newLogicAppName (sourceResourceGroup:string) destinationLogicAppConfig =
+        let call = runGetLogicAppTemplate sourceResourceGroup
         let temp1 =
-            GetLogicAppId resourceGroupFrom logicAppName
+            GetLogicAppId sourceResourceGroup sourceLogicAppName
             |> call
 
         let result =
@@ -45,7 +45,7 @@ module Say =
         let logicAppParam =
             def.Parameters.JsonValue.Properties()
             |> Array.map (fun (x, a) -> x)
-            |> buildParametersAndStoreInArray logicAppConfig
+            |> buildParametersAndStoreInArray destinationLogicAppConfig
             |> convertParametersToJsonString
             |> JsonValue.Parse
             |> Simple.Parameters
@@ -58,7 +58,7 @@ module Say =
             |> Array.map
                 (fun (stringValue, jsonValue) ->
                     let tr =
-                        logicAppConfig.connections
+                        destinationLogicAppConfig.connections
                         |> Array.tryFind (fun (a, b) -> stringValue.Contains(a))
 
                     match tr with
@@ -84,7 +84,7 @@ module Say =
             Simple.Resourcis(resource.Name, resource.Type, resource.ApiVersion, resource.Location.JsonValue, properties)
 
         let workflowParam =
-            addParam ("workflows_" + logicAppName + "_name") newLogicAppName "String"
+            addParam ("workflows_" + sourceLogicAppName + "_name") newLogicAppName "String"
 
         let Param =
             addNewParameterToArray workflowParam [||]
@@ -104,39 +104,16 @@ module Say =
                 simple.Variables
             )
 
-        let fileName = $"{logicAppName}.json"
+        let fileName = $"{sourceLogicAppName}.json"
         File.WriteAllText(fileName, UpdatedTemplate.JsonValue.ToString())
 
-        Az.az $"deployment group create --resource-group {logicAppConfig.resourceGroupName} --template-file {fileName}"
+        Az.az $"deployment group create --resource-group {destinationLogicAppConfig.resourceGroupName} --template-file {fileName}"
         |> printfn "%A"
 
-//    MoveLogicApp "PushAccountToAX_Http_UAT" "PushAccountToAX_Http_PROD" "Dynata-Integrations-UAT" logicAppConfigPROD
-//    MoveLogicApp "PushSalesOrderToAX_Http_UAT" "PushSalesOrderToAX_Http_PROD" "Dynata-Integrations-UAT" logicAppConfigPROD
-//    MoveLogicApp "PushBillingSchedulingToAX_Http_UAT" "PushBillingSchedulingToAX_Http_PROD" "Dynata-Integrations-UAT" logicAppConfigPROD
-//    MoveLogicApp "PushAccountToCRM_Http_UAT" "PushAccountToCRM_Http_PROD" "Dynata-Integrations-UAT" logicAppConfigPROD
-//    MoveLogicApp "PushBstToCRM_Http_UAT" "PushBstToCRM_Http_PROD" "Dynata-Integrations-UAT" logicAppConfigPROD
-//    MoveLogicApp "PushExchangeRate_UAT" "PushExchangeRate_PROD" "Dynata-Integrations-UAT" logicAppConfigPROD
-//    MoveLogicApp "PushInvoiceToCRM_Http_UAT" "PushInvoiceToCRM_Http_PROD" "Dynata-Integrations-UAT" logicAppConfigPROD
-//    MoveLogicApp  "PushVendorToCRM_Http_UAT" "PushVendorToCRM_Http_PROD"   "Dynata-Integrations-UAT" logicAppConfigPROD
-//    MoveLogicApp "ExhangeRateFromAxToSBT_UAT" "ExhangeRateFromAxToSBT_PROD" "Dynata-Integrations-UAT" logicAppConfigPROD
 
-    MoveLogicApp "PushAccountToAX_Http" "PushAccountToAX_Http_UAT" "Dynata-Integrations-DevTest" logicAppConfigUAT
-    MoveLogicApp "PushSalesOrderToAX_Http" "PushSalesOrderToAX_Http_UAT" "Dynata-Integrations-DevTest" logicAppConfigUAT
-    MoveLogicApp "PushBillingSchedulingToAX_Http" "PushBillingSchedulingToAX_Http_UAT" "Dynata-Integrations-DevTest" logicAppConfigUAT
-    MoveLogicApp "PushAccountToCRM_Http" "PushAccountToCRM_Http_UAT" "Dynata-Integrations-DevTest" logicAppConfigUAT
-    MoveLogicApp "PushBstToCRM_Http" "PushBstToCRM_Http_UAT" "Dynata-Integrations-DevTest" logicAppConfigUAT
-    MoveLogicApp "PushExchangeRate" "PushExchangeRate_UAT" "Dynata-Integrations-DevTest" logicAppConfigUAT
-    MoveLogicApp "PushInvoiceToCRM_Http" "PushInvoiceToCRM_Http_UAT" "Dynata-Integrations-DevTest" logicAppConfigUAT
-    MoveLogicApp  "PushVendorToCRM_Http" "PushVendorToCRM_Http_UAT"   "Dynata-Integrations-DevTest"logicAppConfigUAT
-    MoveLogicApp "ExhangeRateFromAxToSBT" "ExhangeRateFromAxToSBT_UAT" "Dynata-Integrations-DevTest" logicAppConfigUAT
+
     
+    MoveLogicApp "PushAccountToAX_Http" "PushAccountToAX_Http_UAT" "Dynata-Integrations-DevTest" destinationLogicAppConfigUAT
+   
     
-//    MoveLogicApp  "PushAccountToAX_Http_UAT" "PushAccountToAX_Http"  "Dynata-Integrations-UAT" logicAppConfigDev
-//    MoveLogicApp "PushSalesOrderToAX_Http_UAT" "PushSalesOrderToAX_Http"  "Dynata-Integrations-UAT" logicAppConfigDev
-//    MoveLogicApp "PushBillingSchedulingToAX_Http_UAT" "PushBillingSchedulingToAX_Http"  "Dynata-Integrations-UAT" logicAppConfigDev
-//    MoveLogicApp "PushAccountToCRM_UAT" "PushAccountToCRM" "Dynata-Integrations-UAT" logicAppConfigDev
-//    MoveLogicApp "PushBstToCRM_UAT" "PushBstToCRM" "Dynata-Integrations-UAT" logicAppConfigDev
-//    MoveLogicApp "PushExchangeRate_UAT" "PushExchangeRate" "Dynata-Integrations-UAT" logicAppConfigDev
-//    MoveLogicApp "PushInvoiceToCRM_UAT" "PushInvoiceToCRM" "Dynata-Integrations-UAT" logicAppConfigDev
-//    MoveLogicApp "PushVendorToCRM_UAT" "PushVendorToCRM" "Dynata-Integrations-UAT" logicAppConfigDev
-//    MoveLogicApp "ExhangeRateFromAxToSBT_UAT" "ExhangeRateFromAxToSBT" "Dynata-Integrations-UAT" logicAppConfigDev
+  

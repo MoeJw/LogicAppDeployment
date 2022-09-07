@@ -39,7 +39,7 @@ let returnConnectionParamValue (logicAppConfigration: (string * TestFarmer1.Conn
         BuildConnectionObject key (JsonSerializer.Serialize(connection, JsonSerializerOptions(WriteIndented = true)))
     | _ -> ""
 
-let returnParamValue (logicAppConfigration: TestFarmer1.LogicAppConfigration) paramName =
+let returnParamValue (logicAppConfigration: TestFarmer1.LogicAppConfiguration) paramName =
     match paramName with
     | (paramName: string) when paramName.Contains("Environment") -> addParam paramName logicAppConfigration.environment "String"
     | (paramName: string) when paramName.Contains("ClientId") -> addParam paramName logicAppConfigration.clientId "String"
