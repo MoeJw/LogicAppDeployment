@@ -35,7 +35,7 @@ let returnConnectionParamValue (logicAppConfigration: (string * TestFarmer1.Conn
         BuildConnectionObject key (JsonSerializer.Serialize(connection, JsonSerializerOptions(WriteIndented = true)))
     | (key, connection) when key.Contains("servicebus") ->
         BuildConnectionObject key (JsonSerializer.Serialize(connection, JsonSerializerOptions(WriteIndented = true)))
-    | (key, connection) when key.Contains("DynataCustomConnector") ->
+    | (key, connection) when key.Contains("CustomConnector") ->
         BuildConnectionObject key (JsonSerializer.Serialize(connection, JsonSerializerOptions(WriteIndented = true)))
     | _ -> ""
 

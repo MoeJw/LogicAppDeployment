@@ -31,7 +31,7 @@ let serviceBusUAT =
 
 
 
-let DynataCustomConnectorUAT =
+let CustomConnectorUAT =
     { connectionId =
           ""
       connectionName = ""
@@ -43,7 +43,7 @@ let destinationLogicAppConfigUAT =
     { connections =
           [| ("dynamicsax", dynamicsAxUAT)
              ("servicebus", serviceBusUAT)
-             ("DynataCustomConnector", DynataCustomConnectorUAT) |]
+             ("CustomConnector", CustomConnectorUAT) |]
       environment = ""
       clientId = ""
       tenant = ""
