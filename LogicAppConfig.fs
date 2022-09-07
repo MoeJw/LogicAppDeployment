@@ -16,27 +16,27 @@ type LogicAppConfiguration =
 
 let dynamicsAxUAT =
     { connectionId =
-          "/subscriptions/d51bc4ba-b7b0-420a-a425-a8d166eb2f6b/resourceGroups/Dynata-Integrations-UAT/providers/Microsoft.Web/connections/dynamicsax"
-      connectionName = "dynamicsax"
+          ""
+      connectionName = ""
       id =
-          "/subscriptions/d51bc4ba-b7b0-420a-a425-a8d166eb2f6b/providers/Microsoft.Web/locations/eastus/managedApis/dynamicsax" }
+          "" }
 
 
 let serviceBusUAT =
     { connectionId =
-          "/subscriptions/d51bc4ba-b7b0-420a-a425-a8d166eb2f6b/resourceGroups/Dynata-Integrations-UAT/providers/Microsoft.Web/connections/servicebus-1"
-      connectionName = "servicebus-1"
+          ""
+      connectionName = ""
       id =
-          "/subscriptions/d51bc4ba-b7b0-420a-a425-a8d166eb2f6b/providers/Microsoft.Web/locations/eastus/managedApis/servicebus" }
+          "" }
 
 
 
 let DynataCustomConnectorUAT =
     { connectionId =
-          "/subscriptions/d51bc4ba-b7b0-420a-a425-a8d166eb2f6b/resourceGroups/Dynata-Integrations-UAT/providers/Microsoft.Web/connections/DynataCustomConnector-UAT-1"
-      connectionName = "DynataCustomConnector-UAT-1"
+          ""
+      connectionName = ""
       id =
-          "/subscriptions/d51bc4ba-b7b0-420a-a425-a8d166eb2f6b/resourceGroups/Dynata-Integrations-UAT/providers/Microsoft.Web/customApis/DynataCustomConnector-UAT" }
+          "" }
 
 
 let destinationLogicAppConfigUAT =
